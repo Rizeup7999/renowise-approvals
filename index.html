@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Variation Approval - RenoWise</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+        
+        .logo {
+            max-height: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading h3 {
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .loading p {
+            color: #999;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #007bff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
+        }
+        
+        .section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h2::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #007bff;
+            border-radius: 50%;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+        
+        .detail-value {
+            color: #212529;
+            font-weight: 500;
+        }
+        
+        .item-list {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+        }
+        
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        
+        .item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .item-details strong {
+            color: #212529;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .item-details small {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .item-price {
+            font-weight: 700;
+            color: #007bff;
+            font-size: 1.1rem;
+            margin-left: 20px;
+            white-space: nowrap;
+        }
+        
+        .total-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .total-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .total-row.grand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #007bff;
+            border-top: 2px solid #007bff;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .actions {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .actions h3 {
+            margin-bottom: 30px;
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 18px 40px;
+            margin: 0 15px 15px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 160px;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-decline {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-decline:hover {
+            background: linear-gradient(135deg, #c82333 0%, #c0392b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+        }
+        
+        .btn-pdf {
+            background: linear-gradient(135deg, #6f42c1 0%, #8e44ad 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+        }
+        
+        .btn-pdf:hover {
+            background: linear-gradient(135deg, #5a32a3 0%, #7d3c98 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(111, 66, 193, 0.4);
+        }
+        
+        .error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #dc3545;
+            text-align: center;
+        }
+        
+        .error h3 {
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 5px solid #28a745;
+        }
+        
+        .success .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .success h1 {
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .media-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .media-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .media-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .section {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .item {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .item-price {
+                margin-left: 0;
+                align-self: flex-end;
+            }
+            
+            .total-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .btn {
+                display: block;
+                margin: 0 0 15px 0;
+                width: 100%;
+            }
+            
+            .actions {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div id="logo-container"></div>
+            <h1 id="page-title">Variation Approval</h1>
+            <p id="page-subtitle">Loading variation details...</p>
+        </div>
+        
+        <div class="content">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <h3>Loading Variation Details</h3>
+                <p>Please wait while we fetch your variation information...</p>
+            </div>
+            
+            <div id="content" style="display: none;">
+                <!-- Content will be loaded here -->
+            </div>
+            
+            <div id="error" style="display: none;" class="error">
+                <h3>Unable to Load Variation</h3>
+                <p id="error-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get token from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        
+        if (!token) {
+            showError('Missing approval token in URL. Please use the link from your email.');
+        } else {
+            loadVariationData(token);
+        }
+        
+        async function loadVariationData(token) {
+            try {
+                const response = await fetch(`https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/review-variation-data?token=${token}`);
+                const data = await response.json();
+                
+                if (data.ok) {
+                    displayVariation(data, token);
+                } else {
+                    showError(data.error || 'Failed to load variation data. Please contact support.');
+                }
+            } catch (error) {
+                showError('Network error: Unable to connect to server. Please check your internet connection and try again.');
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+        }
+        
+        function displayVariation(data, token) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            const variation = data.variation;
+            const materials = data.materials || [];
+            const labour = data.labour || [];
+            const organisation = data.organisation || {};
+            
+            // Update header
+            document.getElementById('page-title').textContent = variation.title || 'Variation Approval';
+            document.getElementById('page-subtitle').textContent = 'Please review the details below and choose your response';
+            
+            // Add logo if available
+            if (organisation.logo_url) {
+                document.getElementById('logo-container').innerHTML = `<img src="${organisation.logo_url}" alt="${organisation.name}" class="logo">`;
+            }
+            
+            // Calculate totals
+            const materialsTotal = materials.reduce((sum, m) => sum + (m.total_client || (m.quantity * m.unit_client) || 0), 0);
+            const labourTotal = labour.reduce((sum, l) => sum + (l.total_client || (l.hours * l.unit_rate) || 0), 0);
+            const subtotal = materialsTotal + labourTotal;
+            const gst = subtotal * 0.1;
+            const total = subtotal + gst;
+            
+            let html = `
+                <div class="section">
+                    <h2>Project Details</h2>
+                    <div class="detail-row">
+                        <span class="detail-label">Client:</span>
+                        <span class="detail-value">${variation.client_name || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Project:</span>
+                        <span class="detail-value">${variation.project || 'Not specified'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Contractor:</span>
+                        <span class="detail-value">${organisation.name || 'RenoWise'}</span>
+                    </div>
+            `;
+            
+            if (organisation.phone) {
+                html += `
+                    <div class="detail-row">
+                        <span class="detail-label">Phone:</span>
+                        <span class="detail-value">${organisation.phone}</span>
+                    </div>
+                `;
+            }
+            
+            if (organisation.email) {
+                html += `
+                    <div class="detail-row">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value">${organisation.email}</span>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            
+            if (variation.description) {
+                html += `
+                    <div class="section">
+                        <h2>Description</h2>
+                        <p style="font-size: 1.1rem; line-height: 1.7; color: #495057;">${variation.description}</p>
+                    </div>
+                `;
+            }
+            
+            if (materials.length > 0) {
+                html += `
+                    <div class="section">
+                        <h2>Materials</h2>
+                        <div class="item-list">
+                `;
+                materials.forEach(m => {
+                    html += `
+                        <div class="item">
+                            <div class="item-details">
+                                <strong>${m.description}</strong>
+                                <small>Quantity: ${m.quantity} @ $${(m.unit_client || 0).toFixed(2)} each</small>
+                            </div>
+                            <div class="item-price">$${(m.total_client || (m.quantity * m.unit_client) || 0).toFixed(2)}</div>
+                        </div>
+                    `;
+                });
+                html += `
+                        </div>
+                        <div style="text-align: right; font-weight: 600; font-size: 1.2rem; color: #007bff; margin-top: 15px;">
+                            Materials Total: $${materialsTotal.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (labour.length > 0) {
+                html += `
+                    <div class="section">
+                        <h2>Labour</h2>
+                        <div class="item-list">
+                `;
+                labour.forEach(l => {
+                    html += `
+                        <div class="item">
+                            <div class="item-details">
+                                <strong>${l.description}</strong>
+                                <small>${l.hours} hours @ $${(l.unit_rate || 0).toFixed(2)} per hour</small>
+                            </div>
+                            <div class="item-price">$${(l.total_client || (l.hours * l.unit_rate) || 0).toFixed(2)}</div>
+                        </div>
+                    `;
+                });
+                html += `
+                        </div>
+                        <div style="text-align: right; font-weight: 600; font-size: 1.2rem; color: #007bff; margin-top: 15px;">
+                            Labour Total: $${labourTotal.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Add photos if available
+            if (data.media && data.media.length > 0) {
+                html += `
+                    <div class="section">
+                        <h2>Photos</h2>
+                        <div class="media-grid">
+                `;
+                data.media.forEach(m => {
+                    if (m.signed_url) {
+                        html += `
+                            <div class="media-item" onclick="window.open('${m.signed_url}', '_blank')">
+                                <img src="${m.signed_url}" alt="Variation photo">
+                            </div>
+                        `;
+                    }
+                });
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `
+                <div class="section">
+                    <h2>Total Cost</h2>
+                    <div class="total-section">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span>$${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="total-row">
+                            <span>GST (10%):</span>
+                            <span>$${gst.toFixed(2)}</span>
+                        </div>
+                        <div class="total-row grand">
+                            <span>Total:</span>
+                            <span>$${total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('content').innerHTML = html;
+            
+            // Add actions section
+            const actionsHtml = `
+                <div class="actions">
+                    <h3>Choose Your Response</h3>
+                    <a href="https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/approve-variation?token=${token}" class="btn btn-approve">
+                        ✅ Approve Variation
+                    </a>
+                    <button onclick="declineVariation('${token}')" class="btn btn-decline">
+                        ❌ Decline Variation
+                    </button>
+                    <a href="https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/generate-variation-pdf?variation_id=${variation.id}" class="btn btn-pdf" target="_blank">
+                        📄 Download PDF
+                    </a>
+                </div>
+            `;
+            
+            document.querySelector('.container').insertAdjacentHTML('beforeend', actionsHtml);
+        }
+        
+        async function declineVariation(token) {
+            if (!confirm('Are you sure you want to decline this variation?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/decline-variation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token })
+                });
+                
+                const result = await response.json();
+                
+                if (result.ok) {
+                    document.body.innerHTML = `
+                        <div class="container">
+                            <div class="content">
+                                <div class="success">
+                                    <span class="icon">❌</span>
+                                    <h1>Variation Declined</h1>
+                                    <p>The variation has been declined successfully. The contractor will be notified of your decision.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    alert('Error declining variation: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error declining variation: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
