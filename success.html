@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Variation Approved - RenoWise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+            text-align: center;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .success-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 50px 30px;
+        }
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 50px 30px;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #495057;
+            line-height: 1.7;
+        }
+        .highlight {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            margin: 25px 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e9ecef;
+            margin: 30px 0;
+        }
+        .small {
+            font-size: 0.95rem;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { border-radius: 15px; }
+            .success-header { padding: 40px 20px; }
+            .content { padding: 40px 20px; }
+            h1 { font-size: 1.8rem; }
+            .icon { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-header">
+            <div class="icon">✅</div>
+            <h1>Variation Approved!</h1>
+            <p class="subtitle">Thank you for your approval</p>
+        </div>
+        
+        <div class="content">
+            <div class="highlight">
+                <p><strong>Your variation has been approved successfully.</strong></p>
+                <p>The contractor will be notified immediately and can now proceed with the approved work.</p>
+            </div>
+            
+            <p>You will receive a confirmation email shortly with the details of your approval.</p>
+            
+            <hr/>
+            
+            <p class="small">If you didn't intend to approve this variation or have any concerns, please contact the contractor immediately using the contact details from your original project agreement.</p>
+            
+            <p class="small"><strong>You can safely close this page.</strong></p>
+        </div>
+    </div>
+</body>
+</html>
