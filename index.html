@@ -742,10 +742,19 @@
             }
         }
         
-        function downloadPDF(token) {
-            // Open PDF in new window - no authentication needed with token
-            const url = `https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/generate-variation-pdf?token=${token}`;
-            window.open(url, '_blank');
+        async function downloadPDF(token) {
+            try {
+                const url = `https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/generate-variation-pdf?token=${token}`;
+                const response = await fetch(url);
+                const html = await response.text();
+                
+                // Create a new window and write the HTML
+                const pdfWindow = window.open('', '_blank');
+                pdfWindow.document.write(html);
+                pdfWindow.document.close();
+            } catch (error) {
+                alert('Error loading PDF: ' + error.message);
+            }
         }
     </script>
 </body>
