@@ -697,9 +697,9 @@
                     <button onclick="declineVariation('${token}')" class="btn btn-decline">
                         ❌ Decline Variation
                     </button>
-                    <a href="https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/generate-variation-pdf?variation_id=${variation.id}" class="btn btn-pdf" target="_blank">
-                        📄 Download PDF
-                    </a>
+            <button onclick="downloadPDF('${token}')" class="btn btn-pdf">
+                📄 Download PDF
+            </button>
                 </div>
             `;
             
@@ -740,6 +740,12 @@
             } catch (error) {
                 alert('Error declining variation: ' + error.message);
             }
+        }
+        
+        function downloadPDF(token) {
+            // Open PDF in new window - no authentication needed with token
+            const url = `https://cikhhnirasyccbszdgjh.supabase.co/functions/v1/generate-variation-pdf?token=${token}`;
+            window.open(url, '_blank');
         }
     </script>
 </body>
